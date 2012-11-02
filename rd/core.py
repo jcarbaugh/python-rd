@@ -1,8 +1,6 @@
 import datetime
 import logging
 
-XRD_NAMESPACE = "http://docs.oasis-open.org/ns/xri/xrd-1.0"
-
 JRD_TYPES = ('application/json', 'application/xrd+json', 'text/json')
 XRD_TYPES = ('application/xrd+xml', 'text/xml')
 
@@ -209,8 +207,6 @@ class Link(object):
 class RD(object):
 
     def __init__(self, xml_id=None, subject=None):
-
-        # rd.attributes.append(Attribute("xmlns", XRD_NAMESPACE))
 
         self.xml_id = xml_id
         self.subject = subject

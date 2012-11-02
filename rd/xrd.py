@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 from xml.dom.minidom import getDOMImplementation, parseString, Node
 
-from rd.core import RD, Element, Link, Property, Title, XRD_NAMESPACE
+from rd.core import RD, Element, Link, Property, Title
+
+XRD_NAMESPACE = "http://docs.oasis-open.org/ns/xri/xrd-1.0"
 
 
 def _get_text(root):
