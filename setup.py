@@ -1,5 +1,5 @@
 from distutils.core import setup
-from xrd import __version__
+from rd import __version__
 
 long_description = open('README.rst').read()
 
