@@ -137,16 +137,6 @@ class ElementList(ListLikeObject):
         return value
 
 
-# class TypeList(ListLikeObject):
-
-#     def item(self, value):
-#         if _is_str(value):
-#             return Type(value)
-#         elif not isinstance(value, Type):
-#             raise ValueError('value must be an instance of Type')
-#         return value
-
-
 class TitleList(ListLikeObject):
 
     def item(self, value):

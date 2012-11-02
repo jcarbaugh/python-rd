@@ -25,8 +25,6 @@ def loads(content):
 
     def properties_handler(key, val, obj):
         for ptype, pvalue in val.items():
-            # prop_type = list(prop.keys())[0]
-            # prop_value = list(prop.values())[0]
             obj.properties.append(Property(ptype, pvalue))
 
     def titles_handler(key, val, obj):
