@@ -1,0 +1,3 @@
+isodate==0.4.7
+requests=0.14.2
+pytz

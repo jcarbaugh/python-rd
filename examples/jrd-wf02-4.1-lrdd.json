@@ -1,0 +1,25 @@
+{
+    "expires": "2012-10-12T20:56:11Z",
+    "subject": "acct:bob@example.com",
+    "aliases": [
+        "http://www.example.com/~bob/"
+    ],
+    "links": [
+        {
+            "rel": "http://webfinger.net/rel/avatar",
+            "href": "http://www.example.com/~bob/bob.jpg"
+        },
+        {
+            "rel": "http://webfinger.net/rel/profile-page",
+            "href": "http://www.example.com/~bob/"
+        },
+        {
+            "rel": "http://packetizer.com/rel/blog",
+            "href": "http://blogs.example.com/bob/"
+        },
+        {
+            "rel": "vcard",
+            "href": "http://www.example.com/~bob/bob.vcf"
+        }
+    ]
+}
