@@ -41,6 +41,12 @@ class Attribute(object):
         self.name = name
         self.value = value
 
+    def __cmp__(self, other):
+        return cmp(str(self), str(other))
+
+    def __eq__(self, other):
+        return str(self) == other
+
     def __str__(self):
         return "%s=%s" % (self.name, self.value)
 
@@ -59,8 +65,11 @@ class Title(object):
         self.value = value
         self.lang = lang
 
-    def __eq__(self, value):
-        return str(self) == value
+    def __cmp__(self, other):
+        return cmp(str(self), str(other))
+
+    def __eq__(self, other):
+        return str(self) == str(other)
 
     def __str__(self):
         if self.lang:
@@ -74,8 +83,11 @@ class Property(object):
         self.type = type_
         self.value = value
 
-    def __eq__(self, value):
-        return str(self) == value
+    def __cmp__(self, other):
+        return cmp(str(self), str(other))
+
+    def __eq__(self, other):
+        return str(self) == other
 
     def __str__(self):
         if self.value:
@@ -103,6 +115,11 @@ class ListLikeObject(list):
 
 
 class AttributeList(ListLikeObject):
+
+    def __call__(self, name):
+        for attr in self:
+            if attr.name == name:
+                yield attr
 
     def item(self, value):
         if isinstance(value, (list, tuple)):
@@ -144,6 +161,11 @@ class TitleList(ListLikeObject):
 
 class LinkList(ListLikeObject):
 
+    def __call__(self, rel):
+        for link in self:
+            if link.rel == rel:
+                yield link
+
     def item(self, value):
         if not isinstance(value, Link):
             raise ValueError('value must be an instance of Link')
@@ -151,6 +173,11 @@ class LinkList(ListLikeObject):
 
 
 class PropertyList(ListLikeObject):
+
+    def __call__(self, type_):
+        for prop in self:
+            if prop.type == type_:
+                yield prop
 
     def item(self, value):
         if _is_str(value):
@@ -174,7 +201,7 @@ class Link(object):
         self.href = href
         self.template = template
         self._titles = TitleList()
-        self._properties = []
+        self._properties = PropertyList()
 
     def get_titles(self):
         return self._titles
@@ -207,18 +234,6 @@ class RD(object):
         self._elements = ElementList()
 
     # ser/deser methods
-
-    # @classmethod
-    # def parse(cls, xrd):    # deprecate this method!!!
-    #     return _parse_xml(xrd)
-
-    # @classmethod
-    # def parse_jrd(cls, jrd):
-    #     return _parse_json(jrd)
-
-    # @classmethod
-    # def parse_xrd(cls, xrd):
-    #     return _parse_xml(xrd)
 
     def to_json(self):
         from rd import jrd

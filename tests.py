@@ -14,17 +14,61 @@ class TestXRDProperty(unittest.TestCase):
 
     def testassignment(self):
 
+        # test RD object
+
         rd = RD()
         rd.properties.append('http://example.com/lang')
         rd.properties.append(('http://example.com/lang', 'en-US'))
         rd.properties.append(Property('http://example.com/lang'))
         rd.properties.append(Property('http://example.com/lang', 'en-US'))
 
+        prop = rd.properties[0]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertIsNone(prop.value)
+
+        prop = rd.properties[1]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertEqual(prop.value, "en-US")
+
+        prop = rd.properties[2]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertIsNone(prop.value)
+
+        prop = rd.properties[3]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertEqual(prop.value, "en-US")
+
+        expected = [None, u'en-US', None, u'en-US']
+        actual = [p.value for p in rd.properties("http://example.com/lang")]
+        self.assertEqual(expected, actual)
+
+        # test Link object
+
         link = Link()
         link.properties.append('http://example.com/lang')
         link.properties.append(('http://example.com/lang', 'en-US'))
         link.properties.append(Property('http://example.com/lang'))
         link.properties.append(Property('http://example.com/lang', 'en-US'))
+
+        prop = link.properties[0]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertIsNone(prop.value)
+
+        prop = link.properties[1]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertEqual(prop.value, "en-US")
+
+        prop = link.properties[2]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertIsNone(prop.value)
+
+        prop = link.properties[3]
+        self.assertEqual(prop.type, "http://example.com/lang")
+        self.assertEqual(prop.value, "en-US")
+
+        expected = [None, u'en-US', None, u'en-US']
+        actual = [p.value for p in rd.properties("http://example.com/lang")]
+        self.assertEqual(expected, actual)
 
     def testequals(self):
 
@@ -43,63 +87,80 @@ class TestXRDProperty(unittest.TestCase):
         # same value, different type
         p1 = Property('http://example.com/p1', '1234')
         p2 = Property('http://example.com/p2', '1234')
-        self.assertTrue(p1 != p2)
+        self.assertFalse(p1 == p2)
 
         # same type, different value
         p1 = Property('http://example.com/p1', '1234')
         p2 = Property('http://example.com/p1', '9876')
-        self.assertTrue(p1 != p2)
+        self.assertFalse(p1 == p2)
 
         # same type, one value missing
         p1 = Property('http://example.com/p1')
         p2 = Property('http://example.com/p1', '12345')
-        self.assertTrue(p1 != p2)
+        self.assertFalse(p1 == p2)
 
         # different type, no value
         p1 = Property('http://example.com/p1')
         p2 = Property('http://example.com/p2')
-        self.assertTrue(p1 != p2)
+        self.assertFalse(p1 == p2)
 
 
 class TestXRDTitle(unittest.TestCase):
 
     def testassignment(self):
+
         link = Link()
         link.titles.append('myfeed')
         link.titles.append(('myfeed', 'en-US'))
         link.titles.append(Title('myfeed'))
         link.titles.append(Title('myfeed', 'en-US'))
 
+        title = link.titles[0]
+        self.assertEqual(title.value, "myfeed")
+        self.assertIsNone(title.lang)
+
+        title = link.titles[1]
+        self.assertEqual(title.value, "myfeed")
+        self.assertEqual(title.lang, "en-US")
+
+        title = link.titles[2]
+        self.assertEqual(title.value, "myfeed")
+        self.assertIsNone(title.lang)
+
+        title = link.titles[3]
+        self.assertEqual(title.value, "myfeed")
+        self.assertEqual(title.lang, "en-US")
+
     def testequals(self):
 
-        # same title and xmllang
+        # same title and lang
         t1 = Title('myfeed', lang='en-US')
         t2 = Title('myfeed', lang='en-US')
         self.assertTrue(t1 == t2)
 
-        # same title, no xmllang
+        # same title, no lang
         t1 = Title('myfeed')
         t2 = Title('myfeed')
         self.assertTrue(t1 == t2)
 
     def testnotequals(self):
 
-        # same title, different xmllang
+        # same title, different lang
         t1 = Title('myfeed', 'en-US')
         t2 = Title('myfeed', 'en-GB')
         self.assertTrue(t1 != t2)
 
-        # same xmllang, different title
+        # same lang, different title
         t1 = Title('myfeed', 'en-US')
         t2 = Title('yourfeed', 'en-US')
         self.assertTrue(t1 != t2)
 
-        # same title, one missing xmllang
+        # same title, one missing lang
         t1 = Title('myfeed')
         t2 = Title('myfeed', 'en-GB')
         self.assertTrue(t1 != t2)
 
-        # different title, no xml lang
+        # different title, no lang
         t1 = Title('myfeed')
         t2 = Title('yourfeed')
         self.assertTrue(t1 != t2)
@@ -112,14 +173,15 @@ class TestJRDDeserialization(unittest.TestCase):
             "links": [
                 {
                     "template": "http://google.com/{uri}",
-                    "titles": [
-                        { "en_us": "this is my rel" }
-                    ]
+                    "titles": {
+                        "en_us": "this is my rel",
+                        "default": "the real rel"
+                    }
                 }
             ],
-            "properties": [
-                { "mimetype": "text/plain" }
-            ]
+            "properties": {
+                "mimetype": "text/plain"
+            }
         }""")
 
     def testproperty(self):
@@ -131,9 +193,11 @@ class TestJRDDeserialization(unittest.TestCase):
         link = self.rd.links[0]
         self.assertEqual(link.template, "http://google.com/{uri}")
 
-        title = link.titles[0]
-        self.assertEqual(title.lang, "en_us")
-        self.assertEqual(title.value, "this is my rel")
+        for title in link.titles:
+            if title.lang == "en_us":
+                self.assertEqual(title.value, "this is my rel")
+            elif title.lang == "none":
+                self.assertEqual(title.value, "the real rel")
 
 
 class TestXRDDeserialization(unittest.TestCase):
@@ -213,7 +277,7 @@ class TestXRDSerialization(unittest.TestCase):
         self.assertEqual(link.getAttribute('template'), "http://google.com/{uri}")
 
 
-class ExamplesTextCase(unittest.TestCase):
+class ExamplesTestCase(unittest.TestCase):
 
     def load_example(self, filename):
         path = os.path.join(PWD, 'examples', filename)
@@ -222,7 +286,54 @@ class ExamplesTextCase(unittest.TestCase):
         return data
 
 
-class TextXRDExamples(ExamplesTextCase):
+class TextConversionExamples(ExamplesTestCase):
+
+    def testrfc6415a(self):
+
+        data = self.load_example("xrd-rfc6415-A.xml")
+        x = xrd.loads(data)
+
+        data = self.load_example("jrd-rfc6415-A.json")
+        j = jrd.loads(data)
+
+        self.assertEqual(x.subject, j.subject)
+        self.assertEqual(x.expires, j.expires)
+        self.assertEqual(x.aliases[0], j.aliases[0])
+        self.assertEqual(x.aliases[1], j.aliases[1])
+
+        xprops = [str(p) for p in x.properties]
+        jprops = [str(p) for p in j.properties]
+        self.assertItemsEqual(xprops, jprops)
+
+        xlink = list(x.links("copyright"))[0]
+        jlink = list(j.links("copyright"))[0]
+        self.assertEqual(xlink.template, jlink.template)
+
+        xauthors = list(x.links("author"))
+        jauthors = list(j.links("author"))
+
+        self.assertEqual(len(xauthors), len(jauthors))
+
+        # first authors link
+
+        xlink = xauthors[0]
+        jlink = jauthors[0]
+
+        self.assertEqual(xlink.type, jlink.type)
+        self.assertEqual(xlink.href, jlink.href)
+        self.assertEqual(sorted(xlink.properties), sorted(jlink.properties))
+        self.assertEqual(sorted(xlink.titles), sorted(jlink.titles))
+
+        # second authors link
+
+        xlink = xauthors[1]
+        jlink = jauthors[1]
+
+        self.assertEqual(xlink.href, jlink.href)
+        self.assertEqual(sorted(xlink.titles), sorted(jlink.titles))
+
+
+class TestXRDExamples(ExamplesTestCase):
 
     def test10b1(self):
 
@@ -265,7 +376,7 @@ class TextXRDExamples(ExamplesTextCase):
     #     xrd.loads(data)
 
 
-class TestJRDExamples(ExamplesTextCase):
+class TestJRDExamples(ExamplesTestCase):
 
     def test41hostmeta(self):
 

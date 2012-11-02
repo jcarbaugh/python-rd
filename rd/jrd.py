@@ -24,18 +24,16 @@ def loads(content):
             obj.aliases.append(alias)
 
     def properties_handler(key, val, obj):
-        for prop in val:
-            prop_type = list(prop.keys())[0]
-            prop_value = list(prop.values())[0]
-            obj.properties.append(Property(prop_type, prop_value))
+        for ptype, pvalue in val.items():
+            # prop_type = list(prop.keys())[0]
+            # prop_value = list(prop.values())[0]
+            obj.properties.append(Property(ptype, pvalue))
 
     def titles_handler(key, val, obj):
-        for title in val:
-            title_lang = list(title.keys())[0]
-            if title_lang == 'default':
-                title_lang = None
-            title_value = list(title.values())[0]
-            obj.titles.append(Title(title_value, title_lang))
+        for tlang, tvalue in val.items():
+            if tlang == 'default':
+                tlang = None
+            obj.titles.append(Title(tvalue, tlang))
 
     def links_handler(key, val, obj):
         for link in val:
