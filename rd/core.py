@@ -183,9 +183,9 @@ class PropertyList(ListLikeObject):
 
 class Link(object):
 
-    def __init__(self, rel=None, type_=None, href=None, template=None):
+    def __init__(self, rel=None, type=None, href=None, template=None):
         self.rel = rel
-        self.type = type_
+        self.type = type
         self.href = href
         self.template = template
         self._titles = TitleList()
@@ -201,7 +201,7 @@ class Link(object):
 
 
 #
-# main XRD class
+# main RD class
 #
 
 class RD(object):
