@@ -5,7 +5,7 @@ long_description = open('README.rst').read()
 
 setup(name="rd",
     version=str(__version__),
-    py_modules=["rd"],
+    packages=["rd"],
     description="Package for serializing and deserializing of XRD and JRD documents",
     author="Jeremy Carbaugh",
     author_email="jcarbaugh@gmail.com",
