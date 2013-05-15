@@ -1,4 +1,5 @@
-# Resource Descriptors in Python
+Resource Descriptors in Python
+==============================
 
 Supports serialization/deserialization of XRD (http://docs.oasis-open.org/xri/xrd/v1.0/xrd-1.0.html) and JRD (http://tools.ietf.org/html/rfc6415).
 
