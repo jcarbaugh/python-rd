@@ -10,7 +10,7 @@ Outstanding issues:
 
 Basic usage::
 
-    from xrd import XRD, Link
+    from rd import RD, Link
 
     lnk = Link(rel='http://spec.example.net/photo/1.0',
                type='image/jpeg',
@@ -19,9 +19,8 @@ Basic usage::
     lnk.titles.append(('Benutzerfoto', 'de'))
     lnk.properties.append(('http://spec.example.net/created/1.0', '1970-01-01'))
 
-    xrd = XRD(subject=http://example.com/gpburdell)
-    xrd.properties.append('http://spec.example.net/type/person')
-    xrd.links.append(lnk)
+    rd = RD(subject='http://example.com/gpburdell')
+    rd.properties.append('http://spec.example.net/type/person')
+    rd.links.append(lnk)
 
-    xrd.to_xml()
-        
+    rd.to_json()
