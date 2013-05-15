@@ -85,7 +85,7 @@ def dumps(xrd):
         "aliases": [],
         "links": [],
         "namespace": [],
-        "properties": [],
+        "properties": {},
         "titles": [],
     }
 
@@ -106,13 +106,13 @@ def dumps(xrd):
         doc['aliases'].append(alias)
 
     for prop in xrd.properties:
-        doc['properties'].append({prop.type: prop.value})
+        doc['properties'][prop.type] = prop.value
 
     for link in xrd.links:
 
         link_doc = {
-            'title': [],
-            'property': [],
+            'titles': {},
+            'properties': {},
         }
 
         if link.rel:
@@ -128,11 +128,11 @@ def dumps(xrd):
             link_doc['template'] = link.template
 
         for prop in link.properties:
-            link_doc['properties'].append({prop.type: prop.value})
+            link_doc['properties'][prop.type] = prop.value
 
         for title in link.titles:
             lang = title.lang or "default"
-            link_doc['titles'].append({lang: title.value})
+            link_doc['titles'][lang] = title.value
 
         _clean_dict(link_doc)
 

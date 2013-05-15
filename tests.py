@@ -240,9 +240,9 @@ class TestJRDSerialization(unittest.TestCase):
         self.doc = json.loads(self.rd.to_json())
 
     def testproperty(self):
-        prop = self.doc['properties'][0]
-        self.assertEqual(list(prop.keys())[0], 'mimetype')
-        self.assertEqual(list(prop.values())[0], 'text/plain')
+        props = self.doc['properties']
+        self.assertTrue('mimetype' in props)
+        self.assertEqual(props['mimetype'], 'text/plain')
 
     def testlink(self):
         link = self.doc['links'][0]
