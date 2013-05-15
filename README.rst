@@ -1,5 +1,6 @@
-Compatible with XRD 1.0 (execpt XRD Signature and XRDS)
-http://docs.oasis-open.org/xrd/xrd/v1.0/xrd-1.0.html
+# Resource Descriptors in Python
+
+Supports serialization/deserialization of XRD (http://docs.oasis-open.org/xri/xrd/v1.0/xrd-1.0.html) and JRD (http://tools.ietf.org/html/rfc6415).
 
 Outstanding issues:
 
@@ -24,3 +25,4 @@ Basic usage::
     rd.links.append(lnk)
 
     rd.to_json()
+    rd.to_xml()
